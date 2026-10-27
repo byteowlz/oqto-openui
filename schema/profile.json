@@ -1,25 +1,10 @@
 {
   "id": "oqto",
-  "version": "0.1.0",
-  "root": "Card",
-  "core": [
-    "Card",
-    "Stack",
-    "Form",
-    "Text",
-    "Heading",
-    "Status",
-    "KeyValue",
-    "List",
-    "Table",
-    "Code",
-    "Button",
-    "TextInput",
-    "Choice",
-    "Toggle"
-  ],
-  "optional": [
-    "Chart",
-    "Image"
-  ]
+  "version": "0.2.0",
+  "root": "Stack",
+  "upstream": {
+    "@openuidev/lang-core": "1.0.2",
+    "@openuidev/react-ui": "0.18.1"
+  },
+  "componentCount": 82
 }

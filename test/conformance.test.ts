@@ -1,30 +1,32 @@
 import { describe, expect, test } from "bun:test";
-import { createParser } from "@openuidev/lang-core";
-import { readdirSync, readFileSync, existsSync, writeFileSync } from "node:fs";
-import { library, coreComponents, optionalComponents, renderFallback } from "../src/index.ts";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { catalog, componentNames, createOqtoParser, PROFILE_VERSION, renderFallback, systemPrompt } from "../src/index.ts";
 
-const parser = createParser(library.toJSONSchema(), library.root);
+const parser = createOqtoParser();
 const fixtures = readdirSync("fixtures");
 
 describe("profile", () => {
-	test("core and optional tiers cover every component exactly once", () => {
-		const all = [...coreComponents, ...optionalComponents].sort();
-		expect(all).toEqual(Object.keys(library.components).sort());
-		expect(optionalComponents).toEqual(["Chart", "Image"]);
+	test("full upstream catalog plus Oqto @Answer", async () => {
+		expect(componentNames.length).toBe(82);
+		for (const c of ["Tabs", "AreaChart", "EditableTable", "OptionCards", "ImageGallery", "Steps", "OverviewCardBlock"]) expect(componentNames).toContain(c);
+		expect(catalog.actions).toContain("Answer");
+		const prompt = await systemPrompt();
+		expect(prompt).toContain("@Answer");
+		expect(prompt).toContain("Oqto");
+		expect(PROFILE_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
 	});
 });
 
 describe.each(fixtures)("fixture %s", (name) => {
-	const input = readFileSync(`fixtures/${name}/input.oui`, "utf8");
-	const result = parser.parse(input);
-	test("parses with expected errors", () => {
-		expect(result.root?.typeName).toBe("Card");
-		const codes = result.meta.errors.map((e: any) => e.code).sort();
-		const expectedFile = `fixtures/${name}/errors.json`;
-		expect(codes).toEqual(existsSync(expectedFile) ? JSON.parse(readFileSync(expectedFile, "utf8")) : []);
+	const result = parser.parse(readFileSync(`fixtures/${name}/input.oui`, "utf8"));
+	test("parses with exactly the expected errors", () => {
+		expect(result.meta.incomplete).toBe(false);
+		const expected = existsSync(`fixtures/${name}/errors.json`) ? JSON.parse(readFileSync(`fixtures/${name}/errors.json`, "utf8")) : [];
+		expect(result.meta.errors.map((e: { code: string }) => e.code).sort()).toEqual(expected);
 	});
-	test("text fallback matches golden", () => {
-		const text = renderFallback(result.root) + "\n";
+	test("text fallback matches golden and is never empty", () => {
+		const text = `${renderFallback(result.root)}\n`;
+		expect(text.trim().length).toBeGreaterThan(0);
 		const golden = `fixtures/${name}/fallback.txt`;
 		if (process.env.UPDATE_GOLDEN) writeFileSync(golden, text);
 		expect(text).toBe(readFileSync(golden, "utf8"));

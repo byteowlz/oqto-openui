@@ -1,6 +1,0 @@
-== Deploy? ==
-Ship build 412 to staging now?
-== Target ==
-Environment: staging / prod
-Notes: ____
-[Deploy]

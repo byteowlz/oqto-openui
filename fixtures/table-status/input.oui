@@ -1,4 +1,0 @@
-root = Card([h, s, t], "Test run")
-h = Heading("Results", 2)
-s = Status("2 failures", "warning")
-t = Table(["Suite", "Passed", "Failed"], [["runner", "196", "0"], ["history", "61", "2"]])

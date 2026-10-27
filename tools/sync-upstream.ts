@@ -1,0 +1,64 @@
+/**
+ * Build-time only: derive the Oqto profile artefacts from the pinned upstream
+ * OpenUI library plus Oqto's own actions and rules. Consumers never load React;
+ * they use the generated JSON with @openuidev/lang-core.
+ *
+ * Run: bun run sync   (telemetry disabled, install scripts ignored)
+ */
+import { writeFileSync } from "node:fs";
+import { defineAction } from "@openuidev/lang-core";
+import { openuiLibrary, openuiPromptOptions } from "@openuidev/react-ui/genui-lib";
+import { z } from "zod";
+import pkg from "../package.json" with { type: "json" };
+import { Envelope } from "../src/envelope.ts";
+
+export const Answer = defineAction({
+	name: "Answer",
+	description:
+		"Submit the user's answer to the agent that asked and resume it. value is any JSON value, typically an object built from form state. Use for every choice, confirmation or form submit that the agent waits for.",
+	params: z.object({ value: z.any() }),
+});
+
+const OQTO_RULES = [
+	"You are writing UI for Oqto. It renders natively on web, desktop, phone and terminals in the user's own theme: never mention colours, fonts or styling.",
+	"When you need a decision or input from the user, end with a Button or Form whose action is @Answer(...) and then stop; the answer comes back as the tool result.",
+	"Only use @OpenUrl for links the user asked for. Never use @ToAssistant to answer on the user's behalf.",
+	"Always state key numbers in text as well as in charts, so the answer is readable without graphics.",
+	"Prefer one clear Card per answer. Use Tabs, Accordion or Steps to structure long content instead of very long Stacks.",
+];
+
+const library = openuiLibrary.extend({ actions: { add: [Answer] } });
+const upstream = {
+	"@openuidev/lang-core": pkg.dependencies["@openuidev/lang-core"],
+	"@openuidev/react-ui": pkg.devDependencies["@openuidev/react-ui"],
+};
+const stable = (v: unknown) => `${JSON.stringify(v, null, 2)}\n`;
+const spec = library.toSpec();
+
+writeFileSync("schema/envelope.json", stable(z.toJSONSchema(Envelope)));
+writeFileSync("schema/library.json", stable(library.toJSONSchema()));
+writeFileSync(
+	"schema/prompt.txt",
+	library.prompt({
+		...openuiPromptOptions,
+		additionalRules: [...(openuiPromptOptions.additionalRules ?? []), ...OQTO_RULES],
+	}),
+);
+writeFileSync(
+	"schema/catalog.json",
+	stable({
+		root: spec.root,
+		groups: spec.componentGroups,
+		components: Object.fromEntries(
+			Object.entries(spec.components)
+				.sort(([a], [b]) => a.localeCompare(b))
+				.map(([name, c]) => [name, { signature: c.signature, description: c.description ?? null }]),
+		),
+		actions: ["Answer", "ToAssistant", "OpenUrl", "Set", "Reset", "Run"],
+	}),
+);
+writeFileSync(
+	"schema/profile.json",
+	stable({ id: "oqto", version: pkg.version, root: spec.root, upstream, componentCount: Object.keys(spec.components).length }),
+);
+console.log(`synced ${Object.keys(spec.components).length} components (profile ${pkg.version})`);

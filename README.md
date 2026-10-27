@@ -9,26 +9,43 @@ Agents write [OpenUI Lang](https://www.openui.com/docs/openui-lang/specification
 This repo pins `@openuidev/lang-core` exactly and defines which components exist;
 hosts register their own native implementations under these names.
 
-## Contents
+## Contents (v0.2)
+
+The catalog is **OpenUI's full component vocabulary** (82 components: layout, tabs,
+accordion, steps, carousel, cards, galleries, metrics, tables incl. editable,
+bar/line/area/radar/pie/radial/scatter charts, forms with select/radio/chips/
+option cards/slider/date picker, follow-up lists) plus Oqto's `@Answer` action and
+Oqto prompt rules. Models already know this vocabulary from OpenUI's docs.
 
 | Path | What |
 |---|---|
-| `src/profile.ts` | Component library (Zod), tiers, `@Answer` action, `PROFILE_VERSION` |
-| `src/envelope.ts` | `oqto.openui.part.v1` envelope: stable id, profile version, body, **required text fallback**, optional answer schema + timeout |
-| `src/fallback.ts` | Reference plain-text renderer (TUI/headless fallback) |
-| `schema/` | Generated, committed: `library.json` (parser schema), `envelope.json`, `profile.json` (tiers), `prompt.txt` (model instructions). Non-TS hosts (Rust runner, Swift, Kotlin, GPUI) consume these. |
-| `fixtures/<name>/` | `input.oui`, golden `fallback.txt`, optional `errors.json`. Every renderer must pass all fixtures. |
+| `tools/sync-upstream.ts` | Build-time only: derives `schema/` from the pinned upstream library + Oqto actions/rules (`bun run sync`). |
+| `schema/library.json` | Parser schema. Every host parses with `@openuidev/lang-core` from this JSON: **no React at runtime**. |
+| `schema/prompt.txt` | Model instructions (~37k chars, ~9k tokens). Inject only while OpenUI is enabled for the Session. |
+| `schema/catalog.json` | Components: signature, description, groups; actions. For non-TS renderers. |
+| `schema/envelope.json` | `oqto.openui.part.v1`: stable id, profile version, body, **required text fallback**, optional answer schema + timeout. |
+| `schema/profile.json` | Profile id/version and pinned upstream versions. |
+| `src/` | TS runtime: `createOqtoParser()`, `systemPrompt()`, `Envelope`, `renderFallback()`. |
+| `fixtures/<name>/` | Rich `input.oui` (dashboard, plan approval, option comparison, editable table, gallery + follow-ups, unknown component), golden `fallback.txt`, optional `errors.json`. |
 
-## Tiers
+## Hosts render everything, at their best capability
 
-- **core** — every host MUST render natively: Card, Stack, Form, Text, Heading,
-  Status, KeyValue, List, Table, Code, Button, TextInput, Choice, Toggle.
-- **optional** — Chart, Image. Hosts that cannot draw them show the text fallback.
+No component is demoted per host. Each host declares capabilities and renders the
+whole catalog as well as it can:
 
-Answers go back with `@Answer(value)`. The **runner** validates them against the
-envelope's answer schema and routes any action through the Oqto permission gate.
-Hosts never call tools, MCP servers or URLs directly. `@OpenUrl`/`@ToAssistant`
-are host events that also pass through the runner.
+- **Web, GPUI, mobile:** native components from Oqto's design tokens.
+- **Terminals (`pi-openui`):** (1) cells in any terminal: real layout, keyboard
+  tabs/accordion, Braille/block charts, sparklines, editable tables, inputs;
+  (2) Kitty graphics / Sixel / iTerm2 images for charts, images and galleries when
+  supported (Rex supports Kitty graphics even over remote sessions);
+  (3) native surface protocols when present (Tern Surface Protocol). Waiting
+  parts report `blocked` via OSC 7501 where supported.
+- **Headless/logs:** `renderFallback()` text.
+
+`@Answer(value)` returns the user's answer; the **runner** validates it against
+the envelope's answer schema. `Query`/`Mutation`/`@OpenUrl`/`@ToAssistant` go
+through the runner and Oqto's permission gate; hosts never call tools, MCP servers
+or URLs directly.
 
 ## Telemetry
 
@@ -55,8 +72,8 @@ will be added under `tokens/` from that target. Do not adopt upstream
 
 ```sh
 bun install          # scripts are ignored by bunfig.toml
-bun run check        # typecheck, tests, regenerate schema, fail if schema changed
+bun run check        # typecheck, tests, re-sync schema, fail if schema changed
 UPDATE_GOLDEN=1 bun run test   # refresh fallback goldens after reviewed changes
 ```
 
-Profile changes bump `PROFILE_VERSION` (semver) and require regenerated `schema/`.
+Profile changes bump `version` in package.json (semver) and require `bun run sync`.

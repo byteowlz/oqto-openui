@@ -1,17 +1,34 @@
 {
   "name": "@byteowlz/oqto-openui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Oqto OpenUI profile: shared component library, envelope schema and conformance fixtures for every Oqto host",
   "type": "module",
   "license": "MIT",
-  "exports": { ".": "./src/index.ts", "./schema/*": "./schema/*" },
-  "files": ["src", "schema", "fixtures"],
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema/*": "./schema/*"
+  },
+  "files": [
+    "src",
+    "schema",
+    "fixtures"
+  ],
   "scripts": {
     "test": "OPENUI_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 bun test",
     "typecheck": "tsc --noEmit",
-    "schema": "OPENUI_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 bun run src/export-schema.ts",
-    "check": "bun run typecheck && bun run test && bun run schema && git diff --exit-code schema"
+    "check": "bun run typecheck && bun run test && bun run sync && git diff --exit-code schema",
+    "sync": "OPENUI_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 bun run tools/sync-upstream.ts"
   },
-  "dependencies": { "@openuidev/lang-core": "1.0.2", "zod": "4.1.12" },
-  "devDependencies": { "typescript": "5.9.3", "@types/bun": "1.3.1" }
+  "dependencies": {
+    "@openuidev/lang-core": "1.0.2",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/bun": "1.3.1",
+    "@openuidev/react-ui": "0.18.1",
+    "@openuidev/react-lang": "1.0.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  }
 }
