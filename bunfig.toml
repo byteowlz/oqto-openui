@@ -1,0 +1,4 @@
+[install]
+# Never run dependency lifecycle scripts: @openuidev/lang-core's postinstall sends install telemetry.
+ignoreScripts = true
+exact = true

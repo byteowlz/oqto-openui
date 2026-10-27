@@ -1,0 +1,3 @@
+root = Card([c, k])
+c = Chart("bar", ["Mon", "Tue", "Wed"], [3, 7, 4], "Deploys")
+k = KeyValue([{label: "Total", value: "14"}])

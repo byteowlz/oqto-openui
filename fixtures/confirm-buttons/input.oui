@@ -1,0 +1,5 @@
+root = Card([t, row], "Delete branch")
+t = Text("Delete feat/old-ui? This cannot be undone.")
+row = Stack([yes, no], true)
+yes = Button("Delete", @Answer(true), "danger")
+no = Button("Keep", @Answer(false))

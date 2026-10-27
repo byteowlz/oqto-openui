@@ -1,0 +1,3 @@
+root = Card([x, ok])
+x = Hologram("nope")
+ok = Text("still renders")

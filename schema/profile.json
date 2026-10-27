@@ -1,0 +1,25 @@
+{
+  "id": "oqto",
+  "version": "0.1.0",
+  "root": "Card",
+  "core": [
+    "Card",
+    "Stack",
+    "Form",
+    "Text",
+    "Heading",
+    "Status",
+    "KeyValue",
+    "List",
+    "Table",
+    "Code",
+    "Button",
+    "TextInput",
+    "Choice",
+    "Toggle"
+  ],
+  "optional": [
+    "Chart",
+    "Image"
+  ]
+}

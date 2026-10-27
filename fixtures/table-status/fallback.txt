@@ -1,0 +1,6 @@
+== Test run ==
+## Results
+[WARNING] 2 failures
+Suite | Passed | Failed
+runner | 196 | 0
+history | 61 | 2

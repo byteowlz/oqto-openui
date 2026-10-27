@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "Card": {
+      "$ref": "#/$defs/Card"
+    },
+    "Stack": {
+      "$ref": "#/$defs/Stack"
+    },
+    "Form": {
+      "$ref": "#/$defs/Form"
+    },
+    "Text": {
+      "$ref": "#/$defs/Text"
+    },
+    "Heading": {
+      "$ref": "#/$defs/Heading"
+    },
+    "Status": {
+      "$ref": "#/$defs/Status"
+    },
+    "KeyValue": {
+      "$ref": "#/$defs/KeyValue"
+    },
+    "List": {
+      "$ref": "#/$defs/List"
+    },
+    "Table": {
+      "$ref": "#/$defs/Table"
+    },
+    "Code": {
+      "$ref": "#/$defs/Code"
+    },
+    "Button": {
+      "$ref": "#/$defs/Button"
+    },
+    "TextInput": {
+      "$ref": "#/$defs/TextInput"
+    },
+    "Choice": {
+      "$ref": "#/$defs/Choice"
+    },
+    "Toggle": {
+      "$ref": "#/$defs/Toggle"
+    },
+    "Chart": {
+      "$ref": "#/$defs/Chart"
+    },
+    "Image": {
+      "$ref": "#/$defs/Image"
+    }
+  },
+  "required": [
+    "Card",
+    "Stack",
+    "Form",
+    "Text",
+    "Heading",
+    "Status",
+    "KeyValue",
+    "List",
+    "Table",
+    "Code",
+    "Button",
+    "TextInput",
+    "Choice",
+    "Toggle",
+    "Chart",
+    "Image"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Card": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Stack"
+              },
+              {
+                "$ref": "#/$defs/Text"
+              },
+              {
+                "$ref": "#/$defs/Heading"
+              },
+              {
+                "$ref": "#/$defs/Status"
+              },
+              {
+                "$ref": "#/$defs/KeyValue"
+              },
+              {
+                "$ref": "#/$defs/List"
+              },
+              {
+                "$ref": "#/$defs/Table"
+              },
+              {
+                "$ref": "#/$defs/Code"
+              },
+              {
+                "$ref": "#/$defs/Button"
+              },
+              {
+                "$ref": "#/$defs/TextInput"
+              },
+              {
+                "$ref": "#/$defs/Choice"
+              },
+              {
+                "$ref": "#/$defs/Toggle"
+              },
+              {
+                "$ref": "#/$defs/Chart"
+              },
+              {
+                "$ref": "#/$defs/Image"
+              }
+            ]
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "children"
+      ],
+      "additionalProperties": false,
+      "id": "Card",
+      "description": "Bordered surface grouping related content, optional title. The usual top-level component."
+    },
+    "Stack": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Text"
+              },
+              {
+                "$ref": "#/$defs/Heading"
+              },
+              {
+                "$ref": "#/$defs/Status"
+              },
+              {
+                "$ref": "#/$defs/KeyValue"
+              },
+              {
+                "$ref": "#/$defs/List"
+              },
+              {
+                "$ref": "#/$defs/Table"
+              },
+              {
+                "$ref": "#/$defs/Code"
+              },
+              {
+                "$ref": "#/$defs/Button"
+              },
+              {
+                "$ref": "#/$defs/TextInput"
+              },
+              {
+                "$ref": "#/$defs/Choice"
+              },
+              {
+                "$ref": "#/$defs/Toggle"
+              },
+              {
+                "$ref": "#/$defs/Chart"
+              },
+              {
+                "$ref": "#/$defs/Image"
+              }
+            ]
+          }
+        },
+        "horizontal": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "children"
+      ],
+      "additionalProperties": false,
+      "id": "Stack",
+      "description": "Vertical (default) or horizontal group of children."
+    },
+    "Text": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "muted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "id": "Text",
+      "description": "Paragraph of plain text. Use for prose; keep it short."
+    },
+    "Heading": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "id": "Heading",
+      "description": "Section heading. level 1 is the largest."
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "id": "Status",
+      "description": "Short status or callout line with a tone."
+    },
+    "KeyValue": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "additionalProperties": false,
+      "id": "KeyValue",
+      "description": "Label/value pairs, e.g. metadata or a summary."
+    },
+    "List": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ordered": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "additionalProperties": false,
+      "id": "List",
+      "description": "Bulleted or numbered list of short text items."
+    },
+    "Table": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "columns",
+        "rows"
+      ],
+      "additionalProperties": false,
+      "id": "Table",
+      "description": "Tabular data. rows are arrays of cell strings in column order."
+    },
+    "Code": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false,
+      "id": "Code",
+      "description": "Preformatted code or command output."
+    },
+    "Button": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "action": {},
+        "tone": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      },
+      "required": [
+        "label",
+        "action"
+      ],
+      "additionalProperties": false,
+      "id": "Button",
+      "description": "Clickable button running an action, e.g. @Answer(...) or @ToAssistant(...)."
+    },
+    "TextInput": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {},
+        "placeholder": {
+          "type": "string"
+        },
+        "multiline": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ],
+      "additionalProperties": false,
+      "id": "TextInput",
+      "description": "Single or multi-line text field bound to a $variable."
+    },
+    "Choice": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "value": {},
+        "multiple": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label",
+        "options",
+        "value"
+      ],
+      "additionalProperties": false,
+      "id": "Choice",
+      "description": "Pick one (or several when multiple=true) of the options, bound to a $variable."
+    },
+    "Toggle": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {}
+      },
+      "required": [
+        "label",
+        "value"
+      ],
+      "additionalProperties": false,
+      "id": "Toggle",
+      "description": "On/off switch bound to a $variable."
+    },
+    "Chart": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "bar",
+            "line"
+          ]
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "labels",
+        "values"
+      ],
+      "additionalProperties": false,
+      "id": "Chart",
+      "description": "Bar or line chart. Optional: not every host can draw charts, always also state the key numbers in text."
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "alt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "alt"
+      ],
+      "additionalProperties": false,
+      "id": "Image",
+      "description": "Image by URL with required alt text. Optional tier."
+    },
+    "Form": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/TextInput"
+              },
+              {
+                "$ref": "#/$defs/Choice"
+              },
+              {
+                "$ref": "#/$defs/Toggle"
+              },
+              {
+                "$ref": "#/$defs/Text"
+              }
+            ]
+          }
+        },
+        "submitLabel": {
+          "type": "string"
+        },
+        "submit": {}
+      },
+      "required": [
+        "title",
+        "fields",
+        "submitLabel",
+        "submit"
+      ],
+      "additionalProperties": false,
+      "id": "Form",
+      "description": "Group of inputs with a submit button. submit is normally @Answer({...})."
+    }
+  },
+  "actions": {
+    "Answer": {
+      "description": "Submit the user's answer to the agent that asked. value is any JSON value, typically an object of the form fields.",
+      "params": {
+        "type": "object",
+        "properties": {
+          "value": {}
+        },
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

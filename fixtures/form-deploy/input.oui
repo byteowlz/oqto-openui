@@ -1,0 +1,5 @@
+root = Card([q, f], "Deploy?")
+q = Text("Ship build 412 to staging now?")
+$env = "staging"
+$notes = ""
+f = Form("Target", [Choice("Environment", ["staging", "prod"], $env), TextInput("Notes", $notes, "optional", true)], "Deploy", @Answer({env: $env, notes: $notes}))

@@ -1,0 +1,2 @@
+Deploys: Mon=3, Tue=7, Wed=4
+Total: 14
