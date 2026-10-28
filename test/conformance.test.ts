@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { catalog, componentNames, createOqtoParser, PROFILE_VERSION, renderFallback, systemPrompt } from "../src/index.ts";
+import { catalog, componentNames, createOqtoParser, PROFILE_VERSION, renderFallback, systemPrompt } from "../src/index.js";
 
 const parser = createOqtoParser();
 const fixtures = readdirSync("fixtures");

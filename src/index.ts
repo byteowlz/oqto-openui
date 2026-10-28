@@ -1,3 +1,3 @@
-export * from "./profile.ts";
-export * from "./envelope.ts";
-export { renderFallback } from "./fallback.ts";
+export * from "./profile.js";
+export * from "./envelope.js";
+export { renderFallback } from "./fallback.js";

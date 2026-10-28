@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
-import { createOqtoParser, createOqtoStreamingParser } from "../src/index.ts";
+import { createOqtoParser, createOqtoStreamingParser } from "../src/index.js";
 
 test("parsing never touches the network, even if runtime telemetry is requested", async () => {
 	const calls: unknown[] = [];

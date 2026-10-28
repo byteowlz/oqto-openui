@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { Envelope, PROFILE_VERSION } from "../src/index.ts";
+import { Envelope, PROFILE_VERSION } from "../src/index.js";
 
 const base = { schema: "oqto.openui.part.v1", partId: "part_0123456789", profile: { id: "oqto", version: PROFILE_VERSION }, body: 'root = Card([Text("x")])', fallback: "x" };
 test("accepts a valid part and rejects missing fallback, foreign profile and oversize body", () => {

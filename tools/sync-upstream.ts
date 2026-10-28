@@ -10,7 +10,7 @@ import { defineAction } from "@openuidev/lang-core";
 import { openuiLibrary, openuiPromptOptions } from "@openuidev/react-ui/genui-lib";
 import { z } from "zod";
 import pkg from "../package.json" with { type: "json" };
-import { Envelope } from "../src/envelope.ts";
+import { Envelope } from "../src/envelope.js";
 
 export const Answer = defineAction({
 	name: "Answer",
