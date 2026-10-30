@@ -1,6 +1,6 @@
 /** Oqto envelope around one OpenUI Lang part. Hosts and the runner validate the same shape. */
 import { z } from "zod";
-import { PROFILE_ID } from "./profile.js";
+import { PROFILE_ID } from "./constants.js";
 export const MAX_BODY_BYTES = 32 * 1024;
 export const MAX_FALLBACK_CHARS = 4000;
 export const Envelope = z.object({

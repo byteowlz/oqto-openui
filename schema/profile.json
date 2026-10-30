@@ -1,6 +1,6 @@
 {
   "id": "oqto",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "root": "Stack",
   "upstream": {
     "@openuidev/lang-core": "1.0.2",

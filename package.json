@@ -1,6 +1,6 @@
 {
   "name": "@byteowlz/oqto-openui",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Oqto OpenUI profile: shared component library, envelope schema and conformance fixtures for every Oqto host",
   "type": "module",
   "license": "MIT",
